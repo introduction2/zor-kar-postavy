@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<title>Získaná postava</title>
+</head>
+<body>
+<h2>Gratulujeme!</h2>
+<p>Získal jsi postavu: <span id="postava"></span></p>
+
+<form id="form">
+<label for="email">Zadej svůj e-mail (nebo přezdívku):</label><br>
+<input type="text" id="email" required><br><br>
+<button type="submit">Potvrdit</button>
+</form>
+
+<p id="status"></p>
+
+<script>
+const postava = new URLSearchParams(window.location.search).get('postava');
+document.getElementById("postava").textContent = postava;
+
+const form = document.getElementById("form");
+form.addEventListener("submit", function(e) {
+e.preventDefault();
+const email = document.getElementById("email").value;
+
+fetch("https://script.google.com/macros/s/AKfycbxVWzHN0sGmOTn2jqTR0TAnQQGng_6XvyYVhR6VuWbubnhOYFBKKLm7zf15YAtZqPVL/exec", {
+method: "POST",
+body: JSON.stringify({
+id: email,
+email: email,
+postava: postava
+}),
+headers: {
+"Content-Type": "application/json"
+}
+})
+.then(res => res.json())
+.then(data => {
+document.getElementById("status").textContent = "Záznam uložen!";
+form.style.display = "none";
+});
+});
+</script>
+</body>
+</html>
